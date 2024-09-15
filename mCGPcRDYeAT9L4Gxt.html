@@ -1,0 +1,602 @@
+<html><head><base href="https://cantoresconcurso.com.br/?">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VozEstelar: Festival de Talentos Musicais</title>
+<link rel="icon" href="https://cantoresconcurso.com.br/favicon.ico" type="image/x-icon">
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .hero {
+    background: url('https://cantoresconcurso.com.br/hero-background.jpg') no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  .contest-name {
+    font-size: 4em;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FFD700, 0 0 35px #FFD700, 0 0 40px #FFD700, 0 0 50px #FFD700, 0 0 75px #FFD700;
+    }
+    to {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FFD700, 0 0 70px #FFD700, 0 0 80px #FFD700, 0 0 100px #FFD700, 0 0 150px #FFD700;
+    }
+  }
+  .contest-tagline {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+  }
+  .cta-button {
+    background-color: #FFD700;
+    color: #333;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    margin: 10px;
+  }
+  .cta-button:hover {
+    background-color: #FFA500;
+    transform: scale(1.05);
+  }
+  .admin-button {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .admin-button:hover {
+    background-color: #45a049;
+  }
+  .genre-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+  }
+  .genre-icon {
+    width: 80px;
+    height: 80px;
+    fill: white;
+    margin: 0 15px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+  }
+  .genre-icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  @media (max-width: 768px) {
+    .contest-name {
+      font-size: 3em;
+    }
+    .contest-tagline {
+      font-size: 1.2em;
+    }
+    .genre-icons {
+      flex-wrap: wrap;
+    }
+    .genre-icon {
+      width: 60px;
+      height: 60px;
+      margin: 10px;
+    }
+  }
+
+  /* Estilos para os modais */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+  }
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  input, select, textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  textarea {
+    resize: vertical;
+  }
+  button[type="submit"] {
+    background-color: #FFD700;
+    color: #333;
+    border: none;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button[type="submit"]:hover {
+    background-color: #FFA500;
+  }
+  
+  /* Estilos para a tabela de inscritos */
+  #inscritosTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  #inscritosTable th, #inscritosTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  #inscritosTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  #inscritosTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  #inscritosTable tr:hover {
+    background-color: #f5f5f5;
+  }
+
+  /* Estilos para o ranking */
+  #rankingTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  #rankingTable th, #rankingTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  #rankingTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  #rankingTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  #rankingTable tr:hover {
+    background-color: #f5f5f5;
+  }
+  .editBtn, .deleteBtn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  .deleteBtn {
+    background-color: #f44336;
+  }
+  #addCandidatoBtn {
+    margin-top: 10px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  .ranking-display {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+  }
+
+  .ranking-display h2 {
+    text-align: center;
+    color: #333;
+  }
+
+  #mainPageRankingTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  #mainPageRankingTable th, #mainPageRankingTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  #mainPageRankingTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+
+  #mainPageRankingTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  #mainPageRankingTable tr:hover {
+    background-color: #f5f5f5;
+  }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <div class="hero-content">
+      <h1 class="contest-name">VozEstelar</h1>
+      <p class="contest-tagline">Festival de Talentos Musicais</p>
+      <a href="#" class="cta-button" id="openModal">Inscreva-se Agora!</a>
+      <a href="#" class="cta-button admin-button" id="openAdminModal">Acesso Admin</a>
+      
+      <div class="genre-icons">
+        <svg class="genre-icon" viewBox="0 0 24 24">
+          <title>MPB</title>
+          <path d="M12,3V12.26C11.5,12.09 11,12 10.5,12C8,12 6,14 6,16.5C6,19 8,21 10.5,21C13,21 15,19 15,16.5V6H19V3H12Z" />
+        </svg>
+        
+        <svg class="genre-icon" viewBox="0 0 24 24">
+          <title>POP</title>
+          <path d="M12,1C7,1 3,5 3,10V17A3,3 0 0,0 6,20H9V12H5V10A7,7 0 0,1 12,3A7,7 0 0,1 19,10V12H15V20H18A3,3 0 0,0 21,17V10C21,5 17,1 12,1Z" />
+        </svg>
+        
+        <svg class="genre-icon" viewBox="0 0 24 24">
+          <title>JAZZ</title>
+          <path d="M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19M11,8H9V10H11V8M12,6H8V7H12V6M12,11H8V12H12V11M18,8H14V10H18V8M18,6H13V7H18V6M18,11H13V12H18V11M17,14H8V16H17V14M5,18H19V15H5V18Z" />
+        </svg>
+        
+        <svg class="genre-icon" viewBox="0 0 24 24">
+          <title>BOLERO</title>
+          <path d="M12,3V12.26C11.5,12.09 11,12 10.5,12C8,12 6,14 6,16.5C6,19 8,21 10.5,21C13,21 15,19 15,16.5V6H19V3H12M19.75,12.43L18.34,11.66L16.22,15.79L17.63,16.56L19.75,12.43M22.17,13.17L20.75,12.4L18.63,16.53L20.04,17.3L22.17,13.17Z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="ranking-display">
+    <h2>Top 10 Candidatos</h2>
+    <table id="mainPageRankingTable">
+      <thead>
+        <tr>
+          <th>Posição</th>
+          <th>Nome</th>
+          <th>Pontuação</th>
+        </tr>
+      </thead>
+      <tbody id="mainPageRankingTableBody">
+        <!-- Ranking data will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal de Inscrição -->
+  <div id="inscricaoModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Inscrição para o VozEstelar</h2>
+      <form id="inscricaoForm">
+        <input type="text" id="nome" name="nome" placeholder="Nome completo" required>
+        <input type="email" id="email" name="email" placeholder="E-mail" required>
+        <input type="tel" id="telefone" name="telefone" placeholder="Telefone" required>
+        <select id="estiloMusical" name="estiloMusical" required>
+          <option value="">Selecione o estilo musical</option>
+          <option value="MPB">MPB</option>
+          <option value="POP Nacional">POP Nacional</option>
+          <option value="POP Internacional">POP Internacional</option>
+          <option value="JAZZ">JAZZ</option>
+          <option value="BOLERO">BOLERO</option>
+          <option value="OUTROS">OUTROS</option>
+        </select>
+        <textarea id="descricao" name="descricao" placeholder="Nos conte um pouco sobre você e sua relação com a música (máx. 100 caracteres)" maxlength="100" required></textarea>
+        <button type="submit">Enviar Inscrição</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Acesso Admin -->
+  <div id="adminModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Acesso Administrativo</h2>
+      <form id="adminForm">
+        <input type="password" id="adminSenha" name="adminSenha" placeholder="Senha de acesso" required>
+        <button type="submit">Acessar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Exibição de Inscritos -->
+  <div id="inscritosModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Lista de Todos os Inscritos</h2>
+      <table id="inscritosTable">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Estilo Musical</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody id="inscritosTableBody">
+          <!-- Os dados dos inscritos serão inseridos aqui dinamicamente -->
+        </tbody>
+      </table>
+      <button id="verRankingBtn">Ver Ranking Top 10</button>
+    </div>
+  </div>
+
+  <!-- Modal de Ranking dos Top 10 -->
+  <div id="rankingModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Ranking dos Top 10 Candidatos</h2>
+      <table id="rankingTable">
+        <thead>
+          <tr>
+            <th>Posição</th>
+            <th>Nome</th>
+            <th>Pontuação</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="rankingTableBody">
+          <!-- Os dados do ranking serão inseridos aqui dinamicamente -->
+        </tbody>
+      </table>
+      <button id="addCandidatoBtn">Adicionar Candidato</button>
+    </div>
+  </div>
+
+  <script>
+    // Animações e efeitos da página principal
+    window.addEventListener('scroll', () => {
+      const icons = document.querySelectorAll('.genre-icon');
+      icons.forEach((icon, index) => {
+        setTimeout(() => {
+          icon.style.opacity = '1';
+          icon.style.transform = 'translateY(0) scale(1)';
+        }, index * 100);
+      });
+    });
+
+    const icons = document.querySelectorAll('.genre-icon');
+    icons.forEach(icon => {
+      icon.addEventListener('mouseover', () => {
+        icon.style.transform = 'scale(1.2) rotate(10deg)';
+      });
+      icon.addEventListener('mouseout', () => {
+        icon.style.transform = 'scale(1) rotate(0deg)';
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      const hero = document.querySelector('.hero');
+      const scrollPosition = window.pageYOffset;
+      hero.style.backgroundPositionY = -scrollPosition * 0.5 + 'px';
+    });
+
+    // Funcionalidade dos modais
+    const inscricaoModal = document.getElementById("inscricaoModal");
+    const adminModal = document.getElementById("adminModal");
+    const inscritosModal = document.getElementById("inscritosModal");
+    const rankingModal = document.getElementById("rankingModal");
+    const openInscricaoBtn = document.getElementById("openModal");
+    const openAdminBtn = document.getElementById("openAdminModal");
+    const closeBtns = document.getElementsByClassName("close");
+    const inscricaoForm = document.getElementById("inscricaoForm");
+    const adminForm = document.getElementById("adminForm");
+
+    openInscricaoBtn.onclick = function() {
+      inscricaoModal.style.display = "block";
+    }
+
+    openAdminBtn.onclick = function() {
+      adminModal.style.display = "block";
+    }
+
+    for (let closeBtn of closeBtns) {
+      closeBtn.onclick = function() {
+        inscricaoModal.style.display = "none";
+        adminModal.style.display = "none";
+        inscritosModal.style.display = "none";
+        rankingModal.style.display = "none";
+      }
+    }
+
+    window.onclick = function(event) {
+      if (event.target == inscricaoModal || event.target == adminModal || event.target == inscritosModal || event.target == rankingModal) {
+        inscricaoModal.style.display = "none";
+        adminModal.style.display = "none";
+        inscritosModal.style.display = "none";
+        rankingModal.style.display = "none";
+      }
+    }
+
+    // Simulação de banco de dados
+    let inscritos = [];
+    let ranking = [];
+
+    inscricaoForm.onsubmit = function(e) {
+      e.preventDefault();
+      const formData = new FormData(inscricaoForm);
+      const inscrito = Object.fromEntries(formData.entries());
+      inscritos.push(inscrito);
+      alert("Inscrição enviada com sucesso!");
+      inscricaoModal.style.display = "none";
+      inscricaoForm.reset();
+    }
+
+    adminForm.onsubmit = function(e) {
+      e.preventDefault();
+      const senha = document.getElementById('adminSenha').value;
+      if (senha === '3123') {
+        adminModal.style.display = "none";
+        exibirInscritos();
+      } else {
+        alert("Senha incorreta!");
+      }
+      adminForm.reset();
+    }
+
+    function exibirInscritos() {
+      const tableBody = document.getElementById('inscritosTableBody');
+      tableBody.innerHTML = '';
+      inscritos.forEach(inscrito => {
+        const row = tableBody.insertRow();
+        row.insertCell(0).textContent = inscrito.nome;
+        row.insertCell(1).textContent = inscrito.email;
+        row.insertCell(2).textContent = inscrito.telefone;
+        row.insertCell(3).textContent = inscrito.estiloMusical;
+        row.insertCell(4).textContent = inscrito.descricao;
+      });
+      inscritosModal.style.display = "block";
+    }
+
+    document.getElementById('verRankingBtn').addEventListener('click', exibirRanking);
+
+    function exibirRanking() {
+      atualizarTabelaRanking();
+      rankingModal.style.display = "block";
+    }
+
+    function atualizarRankingPaginaPrincipal() {
+      const mainPageRankingTableBody = document.getElementById('mainPageRankingTableBody');
+      mainPageRankingTableBody.innerHTML = '';
+      ranking.sort((a, b) => b.pontuacao - a.pontuacao);
+      ranking.slice(0, 10).forEach((candidato, index) => {
+        const row = mainPageRankingTableBody.insertRow();
+        row.insertCell(0).textContent = index + 1;
+        row.insertCell(1).textContent = candidato.nome;
+        row.insertCell(2).textContent = candidato.pontuacao;
+      });
+    }
+
+    function atualizarTabelaRanking() {
+      const rankingTableBody = document.getElementById('rankingTableBody');
+      rankingTableBody.innerHTML = '';
+      ranking.sort((a, b) => b.pontuacao - a.pontuacao);
+      ranking.slice(0, 10).forEach((candidato, index) => {
+        const row = rankingTableBody.insertRow();
+        row.insertCell(0).textContent = index + 1;
+        row.insertCell(1).textContent = candidato.nome;
+        row.insertCell(2).textContent = candidato.pontuacao;
+        const actionsCell = row.insertCell(3);
+        
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Editar';
+        editBtn.className = 'editBtn';
+        editBtn.onclick = () => editarCandidato(index);
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Excluir';
+        deleteBtn.className = 'deleteBtn';
+        deleteBtn.onclick = () => excluirCandidato(index);
+        
+        actionsCell.appendChild(editBtn);
+        actionsCell.appendChild(deleteBtn);
+      });
+      
+      // Update the main page ranking
+      atualizarRankingPaginaPrincipal();
+    }
+
+    function editarCandidato(index) {
+      const candidato = ranking[index];
+      const novaPontuacao = prompt(`Editar pontuação para ${candidato.nome}:`, candidato.pontuacao);
+      if (novaPontuacao !== null) {
+        candidato.pontuacao = parseFloat(novaPontuacao);
+        atualizarTabelaRanking();
+      }
+    }
+
+    function excluirCandidato(index) {
+      if (confirm('Tem certeza que deseja excluir este candidato do ranking?')) {
+        ranking.splice(index, 1);
+        atualizarTabelaRanking();
+      }
+    }
+
+    addCandidatoBtn.onclick = function() {
+      const nome = prompt('Nome do candidato:');
+      const pontuacao = parseFloat(prompt('Pontuação do candidato:'));
+      if (nome && !isNaN(pontuacao)) {
+        ranking.push({ nome, pontuacao });
+        atualizarTabelaRanking();
+      }
+    }
+
+    // Limitador de caracteres para o campo de descrição
+    const descricao = document.getElementById('descricao');
+    descricao.addEventListener('input', function () {
+      if (this.value.length > 100) {
+        this.value = this.value.slice(0, 100);
+      }
+    });
+
+    // Call this function when the page loads to initialize the ranking display
+    window.onload = function() {
+      atualizarRankingPaginaPrincipal();
+    }
+  </script>
+</body>
+</html>
